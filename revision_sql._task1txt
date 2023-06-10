@@ -1,0 +1,133 @@
+CREATE TABLE building (
+    id INTEGER NOT NULL, 
+    building_name VARCHAR, 
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE course (
+    id INTEGER NOT NULL, 
+    course_name VARCHAR, 
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE faculty (
+    id INTEGER NOT NULL, 
+    faculty_name VARCHAR, 
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE grade (
+    id INTEGER NOT NULL, 
+    grade_name VARCHAR, 
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE semester (
+    id INTEGER NOT NULL, 
+    semester_name VARCHAR, 
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE course_program (
+    id INTEGER NOT NULL, 
+    course_id INTEGER, 
+    topic VARCHAR, 
+    hours INTEGER, 
+    semester_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(course_id) REFERENCES course (id), 
+    FOREIGN KEY(semester_id) REFERENCES semester (id)
+);
+
+CREATE TABLE department (
+    id INTEGER NOT NULL, 
+    department_name VARCHAR, 
+    faculty_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(faculty_id) REFERENCES faculty (id)
+);
+
+CREATE TABLE room (
+    id INTEGER NOT NULL, 
+    room_name VARCHAR, 
+    building_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(building_id) REFERENCES building (id)
+);
+
+CREATE TABLE teacher (
+    id INTEGER NOT NULL, 
+    first_name VARCHAR, 
+    last_name VARCHAR, 
+    course_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(course_id) REFERENCES course (id)
+);
+
+CREATE TABLE groups (
+    id INTEGER NOT NULL, 
+    group_name VARCHAR, 
+    department_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(department_id) REFERENCES department (id)
+);
+
+CREATE TABLE student (
+    id INTEGER NOT NULL, 
+    first_name VARCHAR, 
+    last_name VARCHAR, 
+    group_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(group_id) REFERENCES groups (id)
+);
+
+CREATE TABLE study_plan (
+    id INTEGER NOT NULL, 
+    semester_id INTEGER, 
+    course_id INTEGER, 
+    group_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(course_id) REFERENCES course (id), 
+    FOREIGN KEY(group_id) REFERENCES groups (id), 
+    FOREIGN KEY(semester_id) REFERENCES semester (id)
+);
+
+CREATE TABLE timetable (
+    id INTEGER NOT NULL, 
+    teacher_id INTEGER, 
+    group_id INTEGER, 
+    room_id INTEGER, 
+    datetime DATETIME, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(group_id) REFERENCES groups (id), 
+    FOREIGN KEY(room_id) REFERENCES room (id), 
+    FOREIGN KEY(teacher_id) REFERENCES teacher (id)
+);
+
+CREATE TABLE exam (
+    id INTEGER NOT NULL, 
+    course_id INTEGER, 
+    student_id INTEGER, 
+    grade_id INTEGER, 
+    semester_id INTEGER, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(course_id) REFERENCES course (id), 
+    FOREIGN KEY(grade_id) REFERENCES grade (id), 
+    FOREIGN KEY(semester_id) REFERENCES semester (id), 
+    FOREIGN KEY(student_id) REFERENCES student (id)
+);
+
+CREATE TABLE task (
+    id INTEGER NOT NULL, 
+    course_id INTEGER, 
+    student_id INTEGER, 
+    grade_id INTEGER, 
+    program_id INTEGER,
+    created_on DATETIME, 
+    task VARCHAR, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(course_id) REFERENCES course (id), 
+    FOREIGN KEY(grade_id) REFERENCES grade (id), 
+    FOREIGN KEY(program_id) REFERENCES course_program (id), 
+    FOREIGN KEY(student_id) REFERENCES student (id)
+);

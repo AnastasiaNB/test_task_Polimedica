@@ -1,0 +1,18 @@
+1. SELECT student.id, student.first_name, student.last_name, groups.group_name FROM student
+JOIN groups ON student.group_id = groups.id WHERE student.group_id IN (
+SELECT study_plan.group_id from study_plan WHERE study_plan.course_id IN (
+SELECT course.id FROM course WHERE course.course_name = 'Метаматика'));
+
+2. UPDATE exam SET grade_id = (
+SELECT grade.id FROM grade WHERE grade.grade_name = 'Хорошо'
+) WHERE exam.id = 2;
+
+3. SELECT teacher.id, teacher.first_name, teacher.last_name, course.course_name FROM teacher
+JOIN course ON teacher.course_id = course.id WHERE teacher.id IN (
+SELECT timetable.teacher_id FROM timetable WHERE timetable.room_id IN (
+SELECT room.id FROM room WHERE room.building_id = (
+SELECT building.id FROM building WHERE building.building_name = 'Здание №3')));
+
+4. DELETE FROM task WHERE task.created_on < DATETIME(CURRENT_TIMESTAMP, '-1 year');
+
+5. INSERT INTO semester VALUES (1, '1-й семестр 2022 г.');
